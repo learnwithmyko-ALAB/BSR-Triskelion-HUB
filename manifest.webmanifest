@@ -1,10 +1,11 @@
 
 {
+  "id": "/BSR-Triskelion-HUB/",
   "name": "BSR Triskelion HUB",
   "short_name": "BSR HUB",
   "description": "Private learning and chapter legacy platform",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/BSR-Triskelion-HUB/",
+  "scope": "/BSR-Triskelion-HUB/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#111315",
