@@ -1,9 +1,8 @@
 
-/* PUBLIC frontend settings only.
-   Never store passwords or member information here. */
+/* BSR Triskelion HUB — Frontend Configuration */
 
 window.BSR_SETTINGS = {
-  apiUrl: 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbxk4VzJa9p8XEJMz7S_m7UF5WHnd69-vc_hSuLQf6UOgqcUXi_yiuc3eQgBLh5bg9jF/exec',
   title: 'BSR Triskelion HUB',
   version: '1.0.0'
 };
