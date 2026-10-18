@@ -55,6 +55,7 @@ body{background:radial-gradient(ellipse at 62% -30%,#4b38231b,transparent 60%),#
 @media(max-width:620px){.premium-hero{min-height:0;padding:28px 22px;align-items:flex-start}.premium-hero h1{font-size:34px}.hero-crest{flex-basis:85px;gap:5px;margin-top:28px}.crest-halo{width:78px;height:78px;box-shadow:0 0 0 5px #d3a5570b}.crest-halo img{width:73px;height:73px}.crest-caption{display:none}.hero-rule{margin:12px 0}.hero-footnote{font-size:8px;letter-spacing:1px}.premium-hero .sub{font-size:12px}.hero-actions{gap:7px}.hero-actions .btn{font-size:10px;padding:8px 10px}.premium-stats{gap:9px}.premium-stats .stat{min-height:120px;padding:14px}.premium-stats .stat b{font-size:29px}.premium-grid{gap:10px}.premium-grid .tile{min-height:153px;padding:17px}.premium-grid .tile strong{font-size:12px}.premium-grid .tile p{font-size:10px}.section-meta{display:none}.home-lower{gap:0}.auth-panel{padding:29px 23px}}
 @media(max-width:390px){.hero-crest{display:none}.premium-hero h1{font-size:34px}}
 
+
 /* BSR emblem positioning and faithful original-art crop */
 .premium-hero .hero-crest { display:flex; flex-direction:column; align-items:center; justify-content:center; align-self:center; flex:0 0 240px; margin:0; gap:14px; }
 .premium-hero .crest-halo { width:224px; height:224px; padding:12px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
@@ -65,3 +66,10 @@ body{background:radial-gradient(ellipse at 62% -30%,#4b38231b,transparent 60%),#
 @media (max-width:620px) { .premium-hero .hero-crest { flex-basis:86px; gap:5px; align-self:center; margin:0; } .premium-hero .crest-halo { width:82px; height:82px; padding:4px; } .auth-panel .emblem { width:140px; height:140px; } }
 @media (max-width:390px) { .premium-hero .hero-crest { display:none; } }
 
+/* Phase 3 role-specific dashboard */
+.top-logout{display:inline-flex;align-items:center;gap:7px;background:#2d2520;border:1px solid #86633c;color:#f0c985;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;min-height:39px}
+.top-logout .ic{width:16px;height:16px}.top-logout:hover{background:#453321}
+.side-bottom{display:grid;gap:9px}.resident-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:900px}
+.lineage-toggle{background:transparent;border:0;color:inherit;text-align:left;width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:45px;padding:0}
+.lineage-name{display:flex;gap:11px;align-items:center;padding:12px 5px;border-bottom:1px solid #3b3b3d;color:#eee1c7}.lineage-name:last-child{border-bottom:0}.lineage-name .ic{width:16px;height:16px;color:#d8b16c}.lineage-card{max-width:850px}
+@media(max-width:620px){.top-logout{padding:7px 9px;min-height:36px}.top-logout span{display:none}.resident-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
