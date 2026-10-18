@@ -1,4 +1,9 @@
 
+/*
+ * BSR TRISKELION HUB
+ * Public Frontend Configuration
+ */
+
 window.BSR_SETTINGS = {
   apiUrl: 'https://script.google.com/macros/s/AKfycbxk4VzJa9p8XEJMz7S_m7UF5WHnd69-vc_hSuLQf6UOgqcUXi_yiuc3eQgBLh5bg9jF/exec',
   title: 'BSR Triskelion HUB',
