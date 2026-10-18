@@ -35,7 +35,9 @@ function api(action,payload={}){
   });
 }
 function loading(){APP.innerHTML='<div class="loader"><div><div class="spin"></div><div>Loading BSR HUB…</div></div></div>';}
-const txt=(name,value='',placeholder='',type='text',required=false)=>`<label class="field">${h(name)}<input name="${h(name)}" type="${type}" ${required?'required':''} value="${h(value)}" placeholder="${h(placeholder)}" autocomplete="off"></label>`;
+const eyeIcon=(visible)=>`<svg class="ic" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>${visible?'<path d="M3 3l18 18"/>':''}</svg>`;
+const passwordInput=(name,placeholder='',autocomplete='off')=>`<label class="field">${h(name)}<span class="password-wrap"><input name="${h(name)}" type="password" placeholder="${h(placeholder)}" autocomplete="${autocomplete}" required><button type="button" class="password-eye" data-action="togglePassword" aria-label="Show password" aria-pressed="false" title="Show password">${eyeIcon(false)}</button></span></label>`;
+const txt=(name,value='',placeholder='',type='text',required=false)=>type==='password'?passwordInput(name,placeholder,name==='Current Password'?'current-password':'new-password'):`<label class="field">${h(name)}<input name="${h(name)}" type="${type}" ${required?'required':''} value="${h(value)}" placeholder="${h(placeholder)}" autocomplete="off"></label>`;
 const area=(name,value='',required=false)=>`<label class="field wide">${h(name)}<textarea name="${h(name)}" ${required?'required':''}>${h(value)}</textarea></label>`;
 const select=(name,options,value='',required=false)=>`<label class="field">${h(name)}<select name="${h(name)}" ${required?'required':''}>${options.map(o=>`<option value="${h(o.value)}" ${String(o.value)===String(value)?'selected':''}>${h(o.label)}</option>`).join('')}</select></label>`;
 const yesno=(name,checked)=>`<div class="checkline wide"><input type="checkbox" id="f_${name}" name="${name}" ${checked?'checked':''}><label for="f_${name}">${h(name)}</label></div>`;
@@ -50,7 +52,7 @@ function navButton(item){const [v,i,l]=item;return `<button class="navbtn ${S.vi
 function chrome(inner){const name=S.me?.name||'Member',initial=name.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
   APP.innerHTML=`<div class="shell"><aside class="sidebar"><div class="brand"><img src="bsr-logo-original.png" alt="Original BSR chapter logo"><div><b>BSR TRISKELION<br>HUB</b><span>LEARN • LEAD • PRESERVE</span></div></div><div class="sideheading">YOUR CHAPTER HUB</div><div class="side-accent">PRIVATE MEMBER EXPERIENCE</div>${navItems().map(navButton).join('')}<div class="side-bottom">${btn(ico('user')+' My Profile','profile','secondary full')}${btn(ico('logout')+' Log Out','logout','outline full')}</div></aside><main class="page"><div class="topbar"><div class="top-title">TAU GAMMA PHI / SIGMA · BAGUIO SESSION ROAD</div><div class="topright"><button class="top-logout" type="button" data-action="logout" aria-label="Log out">${ico('logout')}<span>Log Out</span></button><span class="badge">${h(S.me?.role||'member').toUpperCase()}</span><span class="avatar" aria-label="${h(name)}">${h(initial)}</span></div></div>${inner}<div class="footer">BSR TRISKELION HUB • Official emblem reproduced from the supplied original • Private member platform</div></main><nav class="bottom-nav" aria-label="Primary navigation">${navItems().map(navButton).join('')}</nav></div>`;
 }
-function loginView(){APP.innerHTML=`<section class="auth-screen"><div class="auth-panel"><img class="emblem" src="bsr-logo-original.png" alt="Original BSR chapter emblem"><div class="eyebrow">Verified BSR members only</div><h1>BSR Triskelion HUB</h1><p class="sub">One chapter. A living legacy.<br>Knowledge • Brotherhood • Service</p>${!configured()?'<div class="notice" style="text-align:left;margin-bottom:14px">Setup required: deploy the backend, then paste the Apps Script /exec URL into <b>github/config.js</b>.</div>':''}<form id="login-form">${txt('Assigned Name','','e.g. Maestro','text',true)}<label class="field">Password<input type="password" name="Password" placeholder="Your private password" autocomplete="current-password" required></label><button type="submit" class="btn full" ${!configured()?'disabled':''}>${ico('lock')} Secure Member Login</button></form><p class="auth-foot">Accounts are created by authorized BSR administrators and officers. Public registration is disabled.</p></div></section>`;}
+function loginView(){APP.innerHTML=`<section class="auth-screen"><div class="auth-panel"><img class="emblem" src="bsr-logo-original.png" alt="Original BSR chapter emblem"><div class="eyebrow">Verified BSR members only</div><h1>BSR Triskelion HUB</h1><p class="sub">One chapter. A living legacy.<br>Knowledge • Brotherhood • Service</p>${!configured()?'<div class="notice" style="text-align:left;margin-bottom:14px">Setup required: deploy the backend, then paste the Apps Script /exec URL into <b>github/config.js</b>.</div>':''}<form id="login-form">${txt('Assigned Name','','e.g. Maestro','text',true)}${passwordInput('Password','Your private password','current-password')}<button type="submit" class="btn full" ${!configured()?'disabled':''}>${ico('lock')} Secure Member Login</button></form><p class="auth-foot">Accounts are created by authorized BSR administrators and officers. Public registration is disabled.</p></div></section>`;}
 function passwordView(){APP.innerHTML=`<section class="auth-screen"><div class="auth-panel"><img class="emblem" src="bsr-logo-original.png" alt="BSR logo"><h1>Protect Your Account</h1><p class="sub">You are using a temporary password. Please choose a new private password before continuing.</p><form id="password-form">${txt('Current Password','','Temporary password','password',true)}${txt('New Password','','12+ chars, upper/lower, number, symbol','password',true)}<button class="btn full" type="submit">${ico('shield')} Save Secure Password</button></form><div class="actions" style="margin-top:18px;justify-content:center">${btn('Log out','logout','outline')}</div></div></section>`;}
 function render(){if(!S.me){loginView();return;}if(S.me.mustChangePassword){passwordView();return;}
   const pages={home:homeView,learn:learnView,legacy:legacyView,leadership:leadershipView,more:moreView,profile:profileView,projects:projectsView,admin:adminView,lesson:lessonView,project:projectView,quiz:quizView};
@@ -224,6 +226,18 @@ async function saveRecord(form){
    if(res.temporaryPassword)showOneTimePassword(res.temporaryPassword,res.member?.username||'');
  }catch(e){safeError(e);form.querySelector('[type="submit"]').disabled=false;}finally{S.busy=false;}
 }
+function confirmDialog(message,title='Please Confirm',danger=false){
+ return new Promise(resolve=>{
+  const wrap=document.createElement('div');wrap.className='modal-overlay bsr-confirm-overlay';
+  wrap.innerHTML=`<div class="modal bsr-confirm" role="alertdialog" aria-modal="true" aria-labelledby="bsr-confirm-title" aria-describedby="bsr-confirm-message"><div class="confirm-emblem">${ico(danger?'trash':'shield')}</div><h3 id="bsr-confirm-title">${h(title)}</h3><p id="bsr-confirm-message">${h(message)}</p><div class="modal-actions"><button type="button" class="btn secondary" data-confirm="cancel">Cancel</button><button type="button" class="btn ${danger?'danger':''}" data-confirm="ok">${danger?'Yes, Delete':'Continue'}</button></div></div>`;
+  document.body.appendChild(wrap);
+  const first=wrap.querySelector('[data-confirm="cancel"]');first.focus();
+  const finish=(v)=>{wrap.removeEventListener('click',click);document.removeEventListener('keydown',key);wrap.remove();resolve(v);};
+  const click=(e)=>{const b=e.target.closest('[data-confirm]');if(b)finish(b.dataset.confirm==='ok');else if(e.target===wrap)finish(false);};
+  const key=(e)=>{if(e.key==='Escape')finish(false);if(e.key==='Tab'){const buttons=[...wrap.querySelectorAll('button')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===buttons.at(-1)){e.preventDefault();buttons[0].focus();}}};
+  wrap.addEventListener('click',click);document.addEventListener('keydown',key);
+ });
+}
 function showOneTimePassword(password,username){
  PORTAL.innerHTML=`<div class="modal-overlay"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><h3>One-Time Member Password</h3><button class="close" data-action="closeModal">${ico('close')}</button></div><div class="notice">Share this password privately with the verified member. It is shown only once. Never post it in group chats or public lists. The member must change it on first login.</div><p style="margin-top:16px">${h(username)}</p><div class="password" id="temp-password">${h(password)}</div><div class="modal-actions">${btn('Copy Password','copyPassword')}${btn('Done','closeModal','secondary')}</div></div></div>`;
 }
@@ -251,6 +265,7 @@ async function handleClick(b){const action=b.dataset.action,id=b.dataset.id;
  case 'nav': S.selected.adminSection='index';await openView(b.dataset.view);break;
  case 'profile':await openView('profile');break;
  case 'closeModal':PORTAL.innerHTML='';break;
+ case 'togglePassword':{const input=b.parentElement?.querySelector('input');if(input){const visible=input.type==='password';input.type=visible?'text':'password';b.setAttribute('aria-label',visible?'Hide password':'Show password');b.setAttribute('title',visible?'Hide password':'Show password');b.setAttribute('aria-pressed',String(visible));b.innerHTML=eyeIcon(visible);}break;}
  case 'adminHome':S.selected.adminSection='index';render();break;
  case 'adminSection':await openAdminSection(b.dataset.kind);break;
  case 'editRecord':await openRecordForm(b.dataset.kind,id);break;
@@ -264,17 +279,17 @@ async function handleClick(b){const action=b.dataset.action,id=b.dataset.id;
  case 'flashReview':{const card=S.cards[S.flashIndex%S.cards.length];await api('learningReview',{lessonId:card.id,remembered:b.dataset.remember==='true'});S.flashIndex++;S.flashRevealed=false;chrome(flashView());toast('Next review scheduled.');break;}
  case 'quizRestart':await openView('quiz');break;
  case 'resetPassword':{
-   if(!confirm('Reset this account? All existing sessions will be revoked.'))break;
+   if(!await confirmDialog('Reset this account password? Existing sessions will be signed out.','Reset Member Password'))break;
    const r=await api('memberResetPassword',{memberId:id});showOneTimePassword(r.temporaryPassword,'');break;}
  case 'deleteRecord':{
-   if(!confirm('Permanently delete this record? This action is logged.'))break;
+   if(!await confirmDialog('Permanently delete this record? This action cannot be undone and will be logged.','Delete Record',true))break;
    await api('delete',{kind:b.dataset.kind,id});S.data[b.dataset.kind]=null;await getLists([b.dataset.kind]);render();toast('Record deleted.');break;}
  case 'copyPassword':await navigator.clipboard.writeText(document.getElementById('temp-password').textContent);toast('Password copied. Share it privately.');break;
  case 'passwordModal':modal('Change Your Password',txt('Current Password','','','password',true)+txt('New Password','','12+ chars with numbers and symbols','password',true),'Update Password','change-pw-form');break;
  case 'logout':{
    try{await api('logout');}catch(_){}sessionStorage.removeItem('bsr_token');S.token='';S.me=null;S.data={};S.view='home';PORTAL.innerHTML='';render();break;}
  case 'addPhoto':uploadPhotoModal();break;
- case 'removePhoto':if(confirm('Remove this private project photo?')){await api('photoDelete',{photoId:id});await loadProjectPhotos();toast('Photo removed.');}break;
+ case 'removePhoto':if(await confirmDialog('Remove this private project photo?','Remove Photo',true)){await api('photoDelete',{photoId:id});await loadProjectPhotos();toast('Photo removed.');}break;
  }}catch(e){safeError(e);}
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b){e.preventDefault();if(!S.busy)handleClick(b);}});
