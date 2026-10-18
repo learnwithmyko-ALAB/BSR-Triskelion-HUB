@@ -1,7 +1,9 @@
 
-/* Cache the public shell only. NEVER cache private member/API content. */
+/* BSR Triskelion HUB — Public App Shell
+   Never cache private member records or API responses.
+*/
 
-const CACHE = 'bsr-hub-shell-v1';
+const CACHE = 'bsr-hub-shell-v2';
 
 const ASSETS = [
   './',
@@ -9,49 +11,60 @@ const ASSETS = [
   './style.css',
   './app.js',
   './config.js',
+  './manifest.webmanifest',
   './bsr-logo-original.png',
   './app-icon-192.png',
   './app-icon-512.png'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(ASSETS))
+      .then(cache => cache.addAll(ASSETS))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys =>
-        Promise.all(
-          keys
-            .filter(k => k !== CACHE)
-            .map(k => caches.delete(k))
-        )
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key =>
+            key.startsWith('bsr-hub-shell-') &&
+            key !== CACHE
+          )
+          .map(key => caches.delete(key))
       )
-      .then(() => self.clients.claim())
+    ).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  if (
-    e.request.method !== 'GET' ||
-    new URL(e.request.url).origin !== self.location.origin
-  ) return;
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
 
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        if (res.ok) {
-          const copy = res.clone();
+  if (
+    request.method !== 'GET' ||
+    url.origin !== self.location.origin ||
+    !url.pathname.startsWith('/BSR-Triskelion-HUB/')
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(request)
+      .then(response => {
+        if (response.ok && response.type === 'basic') {
+          const copy = response.clone();
+
           caches.open(CACHE)
-            .then(cache => cache.put(e.request, copy));
+            .then(cache => cache.put(request, copy))
+            .catch(() => {});
         }
-        return res;
+
+        return response;
       })
-      .catch(() => caches.match(e.request))
+      .catch(() => caches.match(request))
   );
 });
