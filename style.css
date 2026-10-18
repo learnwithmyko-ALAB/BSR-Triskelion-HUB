@@ -101,3 +101,34 @@ body{background:radial-gradient(ellipse at 62% -30%,#4b38231b,transparent 60%),#
   margin-left: auto;
   margin-right: auto;
 }
+
+/* BSR HUB — Perfectly centered loading screen */
+
+.loader {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  z-index: 1000;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #0d0f12;
+  text-align: center;
+}
+
+.loader > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.loader .spin {
+  margin: 0 !important;
+  flex-shrink: 0;
+}
